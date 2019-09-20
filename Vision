@@ -1,0 +1,32 @@
+import io                                                 \\import IO
+import os                                                 \\import OS
+import shutil                                             \\import shutil for Moving of files
+
+from google.cloud import vision                           \\get google cloud vision client from Google cloud module
+from google.cloud.vision import types
+
+client = vision.ImageAnnotatorClient()                    \\ create client
+
+file_name = os.path.join(
+    os.path.dirname(__file__),
+    'foldername/filename.jpg')                            \\file in same folder as the program
+
+with io.open(file_name, 'rb') as image_file:
+    content = image_file.read()
+
+image = types.Image(content=content)
+
+response = client.text_detection(image=image)
+texts = response.text_annotations
+
+source = ("source path")
+destination = ("destination path")
+
+for files in source:
+    if files.endswith(".jpeg"):
+        for text in texts:
+            some_list=[text.description]
+            if any("text in image" in s for s in some_list):
+                shutil.copy(file,destination)
+            else:
+                pass
